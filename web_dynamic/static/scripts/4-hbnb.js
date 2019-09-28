@@ -16,22 +16,21 @@ $(function () {
 
   $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
     if (data.status === 'OK') {
-      console.log("T!");
       $('DIV#api_status').addClass('available');
     } else {
-      console.log("F!");
       $('DIV#api_status').removeClass('available');
     }
   });
 
-  $('button').click( () =>
-  $.ajax('http://0.0.0.0:5001/api/v1/places_search', {
-    data: JSON.stringify({}),
-    contentType: 'application/json',
-    type: 'POST',
-    success: data => {
-      for (const place of data) {
-        const template = `<article>
+  $('button').click(() =>
+    $.ajax('http://0.0.0.0:5001/api/v1/places_search', {
+      data: JSON.stringify({ amenities: Object.keys(listAmenities) }),
+      contentType: 'application/json',
+      type: 'POST',
+      success: data => {
+        $('section.places').empty();
+        for (const place of data) {
+          const template = `<article>
 
       <div class="title">
 
@@ -80,9 +79,8 @@ $(function () {
       </div>
 
     </article> <!-- End 1 PLACE Article -->`;
-        $('section.places').append(template);
-        console.log('T:', template);
+          $('section.places').append(template);
+        }
       }
-    }
-  }));
+    }));
 });
