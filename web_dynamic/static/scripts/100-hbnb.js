@@ -24,7 +24,7 @@ $(function () {
     }
   });
 
-  $('button').click(() =>
+  $('button').click(() => {
     data = { amenities: Object.keys(listAmenities), 
 	     states: Object.keys(listStates),
              cities: Object.keys(listCities) };
@@ -87,7 +87,7 @@ $(function () {
           $('section.places').append(template);
         }
       }
-    }));
+    })});
 
   $('div.locations li input').change(
     function () {
