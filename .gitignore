@@ -3,3 +3,5 @@
 __pycache__
 dev/file.json
 versions/*
+*.DS_store
+100-dump.sql
