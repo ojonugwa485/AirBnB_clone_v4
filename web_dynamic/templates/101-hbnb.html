@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/font-awesome.css') }}?{{ cache_id }}">
     
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript" src="../static/scripts/4-hbnb.js?{{ cache_id }}"></script>
+    <script type="text/javascript" src="../static/scripts/101-hbnb.js?{{ cache_id }}"></script>
   </head>
 
   <!-- **********************
@@ -58,12 +58,16 @@
 	    <h4>&nbsp;</h4>
 	    <ul class="popover">
 	      {% for state in states|dictsort %}
-	      <H2>{{ state[1].name }}{{ state[1].id }}</H2>
+	      <li>
+	      <H2>
+	        <INPUT type="checkbox" data-id="{{ state[1].id }}" data-name="{{ state[1].name }}">{{ state[1].name }}
+	      </H2>
 	      <UL>
 		{% for city in state[1].cities|sort(attribute='name') %}
-		<LI>{{ city.name }}</LI>
+	        <LI><INPUT type="checkbox" data-id="{{ city.id }}" data-name="{{ city.name }}">{{ city.name }}</LI>
 		{% endfor %}
 	      </UL>
+	      </li>
 	      {% endfor %}
 	    </ul>
 	  </div>
