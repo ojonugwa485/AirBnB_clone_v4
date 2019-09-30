@@ -62,7 +62,7 @@ $(function () {
       contentType: 'application/json',
       type: 'POST',
       success: data => {
-        $('section.places').empty();
+        $('section.places article').empty();
         for (const place of data) {
           const template = `<article>
 
@@ -114,7 +114,7 @@ $(function () {
 
       <div class="reviews">
       <h2>Reviews <span class="reviews" data-id="${place.id}">Show</span></h2>
-      <ul><li>foo!</li></ul>
+      <ul></ul>
       </div>
     </article> <!-- End 1 PLACE Article -->`;
           $('section.places').append(template);
@@ -124,10 +124,11 @@ $(function () {
   });
 
   $(document).on('click', 'span.reviews', function () {
+    const ul = $(this).parent().parent().children('ul').last();
+    console.log("UL:", ul);
     if ($(this).text() === 'Show') {
       $(this).text('Hide');
       const url = `http://0.0.0.0:5001/api/v1/places/${$(this).attr('data-id')}/reviews`;
-      const thisobj = $(this);
       $.get(url, function (data) {
         console.log('DATA:', data);
         for (const review of data) {
@@ -135,12 +136,13 @@ $(function () {
             <h3>From ${review.user_id} the ${review.updated_at}</h3>
             <p>${review.text}</p>
           </li>`;
-          thisobj.append(template);
-          $('section.places article div.reviews ul').show();
+          ul.append(template);
+          ul.show();
         }
       });
     } else {
       $(this).text('Show');
+      ul.hide();
     }
   });
 });
