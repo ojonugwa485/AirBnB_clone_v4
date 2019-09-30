@@ -16,7 +16,7 @@ $(function () {
       }
     });
 
-  $('div.locations li input').change(
+  $('div.locations h2 > input').change(
     function () {
       if ($(this).is(':checked')) {
         listStates[($(this).attr('data-id'))] = $(this).attr('data-name');
@@ -28,8 +28,8 @@ $(function () {
         console.log('un-checked', $(this).attr('data-name'));
       }
     });
-  
-   $('div.locations li input li input').change(
+
+  $('div.locations li > input').change(
     function () {
       if ($(this).is(':checked')) {
         listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
@@ -50,12 +50,13 @@ $(function () {
     }
   });
 
-
-
   $('button').click(() => {
-    data = { amenities: Object.keys(listAmenities), 
-	           states: Object.keys(listStates),
-             cities: Object.keys(listCities) };
+    const data = {
+      amenities: Object.keys(listAmenities),
+      states: Object.keys(listStates),
+      cities: Object.keys(listCities)
+    };
+    console.log('DATA:', data);
     $.ajax('http://0.0.0.0:5001/api/v1/places_search', {
       data: JSON.stringify(data),
       contentType: 'application/json',
@@ -118,17 +119,17 @@ $(function () {
     </article> <!-- End 1 PLACE Article -->`;
           $('section.places').append(template);
         }
-
       }
-    })});
+    });
+  });
 
-  $(document).on('click','span.reviews', function () {
-    if ($(this).text() === "Show") {
-      $(this).text("Hide");
-      url = `http://0.0.0.0:5001/api/v1/places/${$(this).attr('data-id')}/reviews`
+  $(document).on('click', 'span.reviews', function () {
+    if ($(this).text() === 'Show') {
+      $(this).text('Hide');
+      const url = `http://0.0.0.0:5001/api/v1/places/${$(this).attr('data-id')}/reviews`;
       const thisobj = $(this);
       $.get(url, function (data) {
-        console.log("DATA:", data);
+        console.log('DATA:', data);
         for (const review of data) {
           const template = `<li>
             <h3>From ${review.user_id} the ${review.updated_at}</h3>
@@ -137,10 +138,9 @@ $(function () {
           thisobj.append(template);
           $('section.places article div.reviews ul').show();
         }
-      })
+      });
     } else {
-      $(this).text("Show");
+      $(this).text('Show');
     }
   });
-
 });

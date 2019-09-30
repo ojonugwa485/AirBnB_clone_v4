@@ -25,9 +25,11 @@ $(function () {
   });
 
   $('button').click(() => {
-    data = { amenities: Object.keys(listAmenities), 
-	     states: Object.keys(listStates),
-             cities: Object.keys(listCities) };
+    const data = {
+      amenities: Object.keys(listAmenities),
+      states: Object.keys(listStates),
+      cities: Object.keys(listCities)
+    };
     $.ajax('http://0.0.0.0:5001/api/v1/places_search', {
       data: JSON.stringify(data),
       contentType: 'application/json',
@@ -87,7 +89,8 @@ $(function () {
           $('section.places').append(template);
         }
       }
-    })});
+    });
+  });
 
   $('div.locations li input').change(
     function () {
@@ -101,8 +104,8 @@ $(function () {
         console.log('un-checked', $(this).attr('data-name'));
       }
     });
-  
-   $('div.locations li input li input').change(
+
+  $('div.locations li input li input').change(
     function () {
       if ($(this).is(':checked')) {
         listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
@@ -114,5 +117,4 @@ $(function () {
         console.log('un-checked', $(this).attr('data-name'));
       }
     });
-  
 });
