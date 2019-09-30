@@ -1,6 +1,7 @@
 const listAmenities = {};
 const listStates = {};
 const listCities = {};
+const users = {};
 
 $(function () {
   $('div.amenities li input').change(
@@ -8,11 +9,9 @@ $(function () {
       if ($(this).is(':checked')) {
         listAmenities[($(this).attr('data-id'))] = $(this).attr('data-name');
         $('div.amenities h4').text(Object.values(listAmenities).join(', '));
-        console.log('checked', $(this).attr('data-name'));
       } else {
         delete listAmenities[($(this).attr('data-id'))];
         $('div.amenities h4').text(Object.values(listAmenities).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
       }
     });
 
@@ -21,11 +20,9 @@ $(function () {
       if ($(this).is(':checked')) {
         listStates[($(this).attr('data-id'))] = $(this).attr('data-name');
         $('div.locations h4').text(Object.values(listStates).join(', '));
-        console.log('checked', $(this).attr('data-name'));
       } else {
         delete listStates[($(this).attr('data-id'))];
         $('div.locations h4').text(Object.values(listStates).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
       }
     });
 
@@ -34,11 +31,9 @@ $(function () {
       if ($(this).is(':checked')) {
         listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
         $('div.locations h4').text(Object.values(listCities).join(', '));
-        console.log('checked', $(this).attr('data-name'));
       } else {
         delete listCities[($(this).attr('data-id'))];
         $('div.locations h4').text(Object.values(listCities).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
       }
     });
 
@@ -56,16 +51,15 @@ $(function () {
       states: Object.keys(listStates),
       cities: Object.keys(listCities)
     };
-    console.log('DATA:', data);
     $.ajax('http://0.0.0.0:5001/api/v1/places_search', {
       data: JSON.stringify(data),
       contentType: 'application/json',
       type: 'POST',
       success: data => {
-        $('section.places article').empty();
+        $('section.places').empty();
+        $('section.places').append('<h1>Places</h1>');
         for (const place of data) {
           const template = `<article>
-
       <div class="title">
 
         <h2>${place.name}</h2>
@@ -125,15 +119,13 @@ $(function () {
 
   $(document).on('click', 'span.reviews', function () {
     const ul = $(this).parent().parent().children('ul').last();
-    console.log("UL:", ul);
     if ($(this).text() === 'Show') {
       $(this).text('Hide');
       const url = `http://0.0.0.0:5001/api/v1/places/${$(this).attr('data-id')}/reviews`;
       $.get(url, function (data) {
-        console.log('DATA:', data);
         for (const review of data) {
           const template = `<li>
-            <h3>From ${review.user_id} the ${review.updated_at}</h3>
+            <h3>From ${users[review.user_id]} the ${review.updated_at}</h3>
             <p>${review.text}</p>
           </li>`;
           ul.append(template);
@@ -143,6 +135,12 @@ $(function () {
     } else {
       $(this).text('Show');
       ul.hide();
+    }
+  });
+
+  $.getJSON('http://0.0.0.0:5001/api/v1/users/', (data) => {
+    for (const user of data) {
+      users[user.id] = `${user.first_name} ${user.last_name}`;
     }
   });
 });
