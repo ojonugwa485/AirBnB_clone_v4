@@ -24,7 +24,7 @@ def teardown_db(exception):
     storage.close()
 
 
-@app.route('/101-hbnb')
+@app.route('/101-hbnb/')
 def hbnb_filters(the_id=None):
     """
     handles request to custom template with states, cities & amentities

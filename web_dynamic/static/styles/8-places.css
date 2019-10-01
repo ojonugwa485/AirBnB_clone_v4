@@ -65,6 +65,7 @@ section.places article div.reviews ul {
 	font-size: 30px;
 	text-align: center;
 	line-height: 60px;
+	overflow: auto;
 }
 
 .container .places .information {

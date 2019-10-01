@@ -1,17 +1,14 @@
-const listAmenities = {};
-
 $(function () {
+  const listAmenities = {};
+
   $('div.amenities li input').change(
     function () {
       if ($(this).is(':checked')) {
         listAmenities[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.amenities h4').text(Object.values(listAmenities).join(', '));
-        console.log('checked', $(this).attr('data-name'));
       } else {
         delete listAmenities[($(this).attr('data-id'))];
-        $('div.amenities h4').text(Object.values(listAmenities).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
       }
+      $('div.amenities h4').html(Object.values(listAmenities).join(', ') || '&nbsp;');
     });
 
   $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
@@ -29,6 +26,7 @@ $(function () {
       type: 'POST',
       success: data => {
         $('section.places').empty();
+        $('section.places').append('<h1>Places</h1>');
         for (const place of data) {
           const template = `<article>
 

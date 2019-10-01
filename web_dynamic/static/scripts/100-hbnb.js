@@ -1,19 +1,16 @@
-const listAmenities = {};
-const listStates = {};
-const listCities = {};
-
 $(function () {
+  const listAmenities = {};
+  const listStates = {};
+  const listCities = {};
+
   $('div.amenities li input').change(
     function () {
       if ($(this).is(':checked')) {
         listAmenities[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.amenities h4').text(Object.values(listAmenities).join(', '));
-        console.log('checked', $(this).attr('data-name'));
       } else {
         delete listAmenities[($(this).attr('data-id'))];
-        $('div.amenities h4').text(Object.values(listAmenities).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
       }
+      $('div.amenities h4').html(Object.values(listAmenities).join(', ') || '&nbsp;');
     });
 
   $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
@@ -23,6 +20,28 @@ $(function () {
       $('DIV#api_status').removeClass('available');
     }
   });
+
+  $('div.locations h2 > input').change(
+    function () {
+      if ($(this).is(':checked')) {
+        listStates[($(this).attr('data-id'))] = $(this).attr('data-name');
+      } else {
+        delete listStates[($(this).attr('data-id'))];
+      }
+      const both = Object.values(listStates).concat(Object.values(listCities));
+      $('div.locations h4').html(both.join(', ') || '&nbsp;');
+    });
+
+  $('div.locations li > input').change(
+    function () {
+      if ($(this).is(':checked')) {
+        listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
+      } else {
+        delete listCities[($(this).attr('data-id'))];
+      }
+      const both = Object.values(listStates).concat(Object.values(listCities));
+      $('div.locations h4').html(both.join(', ') || '&nbsp;');
+    });
 
   $('button').click(() => {
     const data = {
@@ -36,6 +55,7 @@ $(function () {
       type: 'POST',
       success: data => {
         $('section.places').empty();
+        $('section.places').append('<h1>Places</h1>');
         for (const place of data) {
           const template = `<article>
 
@@ -91,30 +111,4 @@ $(function () {
       }
     });
   });
-
-  $('div.locations li input').change(
-    function () {
-      if ($(this).is(':checked')) {
-        listStates[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.locations h4').text(Object.values(listStates).join(', '));
-        console.log('checked', $(this).attr('data-name'));
-      } else {
-        delete listStates[($(this).attr('data-id'))];
-        $('div.locations h4').text(Object.values(listStates).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
-      }
-    });
-
-  $('div.locations li input li input').change(
-    function () {
-      if ($(this).is(':checked')) {
-        listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.locations h4').text(Object.values(listCities).join(', '));
-        console.log('checked', $(this).attr('data-name'));
-      } else {
-        delete listCities[($(this).attr('data-id'))];
-        $('div.locations h4').text(Object.values(listCities).join(', '));
-        console.log('un-checked', $(this).attr('data-name'));
-      }
-    });
 });

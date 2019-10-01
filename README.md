@@ -1,6 +1,14 @@
 <img src="https://github.com/jarehec/AirBnB_clone_v3/blob/master/dev/HBTN-hbnb-Final.png" width="160" height=auto />
 
-# AirBnB Clone: Phase # 3
+# AirBnB Clone: Phase # 4
+
+: Web Dynamic with JQuery
+
+In the latest phase 4 refactor we took the entire Places listing to the client-side
+using JQuery. We also added check boxes to the Locations and Amenities filters which
+affect the search results when the Places are fetched via JQuery communicating
+with the Flask API. Reviews are also fetched and asynchronously populated upon
+client request. It's all really quite grand.
 
 : API with Swagger
 

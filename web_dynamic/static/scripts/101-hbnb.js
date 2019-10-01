@@ -1,40 +1,17 @@
-const listAmenities = {};
-const listStates = {};
-const listCities = {};
-const users = {};
-
 $(function () {
+  const listAmenities = {};
+  const listStates = {};
+  const listCities = {};
+  const users = {};
+
   $('div.amenities li input').change(
     function () {
       if ($(this).is(':checked')) {
         listAmenities[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.amenities h4').text(Object.values(listAmenities).join(', '));
       } else {
         delete listAmenities[($(this).attr('data-id'))];
-        $('div.amenities h4').text(Object.values(listAmenities).join(', '));
       }
-    });
-
-  $('div.locations h2 > input').change(
-    function () {
-      if ($(this).is(':checked')) {
-        listStates[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.locations h4').text(Object.values(listStates).join(', '));
-      } else {
-        delete listStates[($(this).attr('data-id'))];
-        $('div.locations h4').text(Object.values(listStates).join(', '));
-      }
-    });
-
-  $('div.locations li > input').change(
-    function () {
-      if ($(this).is(':checked')) {
-        listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
-        $('div.locations h4').text(Object.values(listCities).join(', '));
-      } else {
-        delete listCities[($(this).attr('data-id'))];
-        $('div.locations h4').text(Object.values(listCities).join(', '));
-      }
+      $('div.amenities h4').html(Object.values(listAmenities).join(', ') || '&nbsp;');
     });
 
   $.getJSON('http://0.0.0.0:5001/api/v1/status/', (data) => {
@@ -44,6 +21,28 @@ $(function () {
       $('DIV#api_status').removeClass('available');
     }
   });
+
+  $('div.locations h2 > input').change(
+    function () {
+      if ($(this).is(':checked')) {
+        listStates[($(this).attr('data-id'))] = $(this).attr('data-name');
+      } else {
+        delete listStates[($(this).attr('data-id'))];
+      }
+      const both = Object.values(listStates).concat(Object.values(listCities));
+      $('div.locations h4').html(both.join(', ') || '&nbsp;');
+    });
+
+  $('div.locations li > input').change(
+    function () {
+      if ($(this).is(':checked')) {
+        listCities[($(this).attr('data-id'))] = $(this).attr('data-name');
+      } else {
+        delete listCities[($(this).attr('data-id'))];
+      }
+      const both = Object.values(listStates).concat(Object.values(listCities));
+      $('div.locations h4').html(both.join(', ') || '&nbsp;');
+    });
 
   $('button').click(() => {
     const data = {
