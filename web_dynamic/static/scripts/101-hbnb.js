@@ -106,7 +106,7 @@ $(function () {
       </div>
 
       <div class="reviews">
-      <h2>Reviews <span class="reviews" data-id="${place.id}">Show</span></h2>
+      <h2><span class="num">Reviews</span> <span class="reviews" data-id="${place.id}">Show</span></h2>
       <ul></ul>
       </div>
     </article> <!-- End 1 PLACE Article -->`;
@@ -121,10 +121,14 @@ $(function () {
     if ($(this).text() === 'Show') {
       $(this).text('Hide');
       const url = `http://0.0.0.0:5001/api/v1/places/${$(this).attr('data-id')}/reviews`;
+      const parent = $(this).parent();
       $.get(url, function (data) {
+        const len = Object.keys(data).length;
+        parent.children('span.num').text(`${len} Review${len !== 1 ? 's' : ''}`);
         for (const review of data) {
+          const datestr = (new Date(Date.parse(review.updated_at))).toDateString();
           const template = `<li>
-            <h3>From ${users[review.user_id]} the ${review.updated_at}</h3>
+            <h3>From ${users[review.user_id]} the ${datestr}</h3>
             <p>${review.text}</p>
           </li>`;
           ul.append(template);
@@ -132,6 +136,7 @@ $(function () {
         }
       });
     } else {
+      $(this).parent().children('span.num').text('Reviews');
       $(this).text('Show');
       ul.hide();
     }
